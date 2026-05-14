@@ -1,4 +1,4 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsArray, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -8,4 +8,8 @@ export class CreatePostDto {
   @IsString()
   @MinLength(5, { message: 'Content must be at least 5 characters long' })
   content!: string;
+
+  @IsArray()
+  @IsOptional()
+  tagIds?: number[] = [];
 }

@@ -11,7 +11,7 @@ export class PostsService {
 
   async findAll(): Promise<Post[]> {
     return await this.postRepository.find({
-      relations: ['user'],
+      relations: ['user', 'tags'],
       order: {
         createdAt: 'DESC',
       },
@@ -21,7 +21,7 @@ export class PostsService {
   async findByUserId(userId: number): Promise<Post[]> {
     return await this.postRepository.find({
       where: { user: { id: userId } },
-      relations: ['user'],
+      relations: ['user', 'tags'],
       order: {
         createdAt: 'DESC',
       },
