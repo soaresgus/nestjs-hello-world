@@ -28,4 +28,12 @@ export class ProfilesService {
     });
     return await this.profileRepository.save(profile);
   }
+
+  async remove(id: number) {
+    return await this.profileRepository.softDelete(id);
+  }
+
+  async restore(id: number) {
+    return await this.profileRepository.restore(id);
+  }
 }
