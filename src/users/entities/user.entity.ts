@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Profile } from 'src/profiles/entities/profile.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users') // Table name
 export class User {
@@ -13,4 +14,7 @@ export class User {
 
   @Column({ default: true }) // Valor padrão
   isActive!: boolean;
+
+  @OneToOne(() => Profile, (profile) => profile.user) // Estabelece um relacionamento um-para-um com a entidade Profile
+  profile!: Profile;
 }

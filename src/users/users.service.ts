@@ -30,12 +30,15 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.usersRepository.find();
+    const users = await this.usersRepository.find({ relations: ['profile'] }); // Carrega os usuários junto com seus perfis relacionados
     return users;
   }
 
   async findOne(id: number): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['profile'],
+    });
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not founded.`);
