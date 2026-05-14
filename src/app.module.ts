@@ -4,10 +4,11 @@ import { AppService } from './app.service';
 import { BooksModule } from './books/books.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './users/users.module';
+import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { TagsModule } from './tags/tags.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -31,10 +32,11 @@ import { TagsModule } from './tags/tags.module';
       }),
     }),
     BooksModule,
-    UserModule,
+    UsersModule,
     PostsModule,
     ProfilesModule,
     TagsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -11,6 +11,9 @@ export class User extends BaseEntity {
   @Column({ unique: true }) // Garante que o email seja único
   email!: string;
 
+  @Column({ select: false }) // Não seleciona a senha por padrão
+  password!: string;
+
   @Column({ default: true }) // Valor padrão
   isActive!: boolean;
 

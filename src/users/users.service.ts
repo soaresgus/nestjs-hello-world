@@ -8,7 +8,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(
@@ -17,7 +17,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { email } = createUserDto;
+    const { email, password } = createUserDto;
 
     const userExists = await this.usersRepository.findOne({ where: { email } });
 
@@ -25,7 +25,12 @@ export class UsersService {
       throw new ConflictException(`User with email ${email} already exists.`);
     }
 
-    const newUser = this.usersRepository.create(createUserDto);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = this.usersRepository.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
     return await this.usersRepository.save(newUser);
   }
 
@@ -42,6 +47,20 @@ export class UsersService {
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not founded.`);
+    }
+
+    return user;
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password', 'firstName', 'isActive'], // Seleciona explicitamente os campos necessários, incluindo a senha
+      relations: ['profile'],
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not founded.`);
     }
 
     return user;

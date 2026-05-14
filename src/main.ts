@@ -16,6 +16,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('NestJS Hello World')
+    .addBearerAuth()
     .setDescription('Hello World with users, posts and tags')
     .setVersion('1.0')
     .build();

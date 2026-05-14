@@ -1,8 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import type { ActiveUserData } from 'src/auth/interfaces/active-user.interface';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
@@ -25,15 +30,15 @@ export class PostsController {
     return await this.postsService.findByUserId(+userId);
   }
 
-  @Post(':userId')
+  @Post()
   @ApiOperation({
-    summary: 'Create a new post for a user',
-    description: 'Creates a new post associated with a specific user.',
+    summary: 'Create a new post for a authenticated user',
+    description: 'Creates a new post associated with a authenticated user.',
   })
   async create(
-    @Param('userId') userId: string,
     @Body() createPostDto: CreatePostDto,
+    @GetUser() user: ActiveUserData,
   ) {
-    return await this.postsService.create(+userId, createPostDto);
+    return await this.postsService.create(user.sub, createPostDto);
   }
 }
