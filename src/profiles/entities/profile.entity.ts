@@ -1,17 +1,9 @@
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { User } from 'src/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity('profiles')
-export class Profile {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+export class Profile extends BaseEntity {
   @Column({ nullable: true })
   bio!: string;
 
